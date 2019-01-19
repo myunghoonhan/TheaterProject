@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context docBase="TheaterProject" path="/TheaterProject" reloadable="true" source="org.eclipse.jst.jee.server:TheaterProject">
+	<Resource name="jdbc/oracle"
+					 auth="Container" 
+					 driverClassName="oracle.jdbc.driver.OracleDriver" 
+					 type="javax.sql.DataSource" 
+					 url="jdbc:oracle:thin:@localhost:1521:xe" 
+					 username="theater" 
+					 password="theater" 
+					 maxActive="20"
+					 maxIdle="10"
+	 />
+</Context>

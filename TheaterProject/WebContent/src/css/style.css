@@ -1,0 +1,131 @@
+html, body {
+	width: 100%;
+	height: 100%;
+}
+
+body{
+	display: block;
+}
+
+#index_body{
+	display: block;
+  padding-top: 51px;
+}
+
+#header_navbar_default{
+	background-color: rgba(255, 255, 255, 0.8);
+	border-color: rgba(255, 255, 255, 0);
+	box-shadow: 0px 1px 10px #5b5b5b;
+}
+#header_navbar_default .img_index {
+	width: 23px;
+	height: 23px;
+}
+#header_navbar_default .head_link_default{
+	margin-right: 20px;
+}
+#header_navbar_default .navbar-toggle{
+	background-color: rgba(255, 255, 255, 1);
+}
+
+#detail_main .panel-default{
+	position: fixed;
+	width: 16%;
+}
+
+@media (max-width: 980px)
+{
+	#detail_main .panel-default{
+		position: relative;
+		width: auto;
+	}
+}
+@media (max-width: 768px)
+{
+	#header_navbar_default{
+		background-color: rgba(255, 255, 255, 1);
+	}
+	#header_navbar_default .form-control{
+		width: 100%;
+	}
+}
+
+@media (min-width: 768px)
+{
+	#loginModal .modal-dialog{
+		margin-top: 200px;
+		width: 420px;
+	}
+	#registerModal .modal-dialog{
+		margin-top: 60px;
+		width: 420px;
+	}
+	#mypageModal .modal-dialog{
+		margin-top: 60px;
+		width: 380px;
+	}
+}
+
+main{
+	background-color: white;
+}
+
+/* 인덱스 탭 */
+#index_nav_tabs li{
+	font-size: 21px;
+	font-weight: bold;
+}
+#index_nav_tabs a{
+	color: #d9534f;
+}
+#index_nav_tabs .active a{
+	color: #777;
+}
+#nav_tabs_dropdown_menu li{
+	font-size: 16px;
+}
+/* end 인덱스 탭 */
+
+.pagination>.active>a{
+	background-color: #d9534f;
+}
+
+#about_main .col-sm-2{
+	padding-left: 0px;
+	padding-right: 0px;
+}
+
+#index_content1{
+	width: 1100px;
+	height: 350px;
+	margin: 0 auto;
+	background-color: brown;
+}
+
+#index_content1 .post{
+	width: 353px;
+	height: 243px;
+	float: left;
+	background-color: white;
+}
+
+#New_thumblist .caption h4{
+	font-size: 15px;
+}
+
+#main_mypage .jumbotron .list_title{
+	width: 120px;
+	height: 50px;
+	font-size: 15px;
+}
+
+
+#index_footer{
+    padding-top: 40px;
+    padding-bottom: 40px;
+    margin-top: 100px;
+    color: #767676;
+    text-align: center;
+    border-top: 1px solid #e5e5e5;
+}
+ 
