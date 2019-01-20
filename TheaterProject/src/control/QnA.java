@@ -40,16 +40,16 @@ public class QnA extends HttpServlet {
         int pageSize = 10;
         int count = 0;
         int number = 0;
-        int currentPage = Integer.parseInt(pageNum);
+        int currentPage = Integer.parseInt(pageNum); // 1,2,3,10
 
         TheaterDao tdao = new TheaterDao();
-        count = tdao.getAllcount();
+        count = tdao.getAllcount(); // 17,102
 
-        int start = (currentPage - 1) * pageSize + 1;
-        int end = currentPage * pageSize;
+        int start = (currentPage - 1) * pageSize + 1;   // 1, 11, 21, 91
+        int end = currentPage * pageSize;               // 10, 20, 30, 100
+        number = count - (currentPage - 1) * pageSize;  // 17-0= 17, 17-10= 7, 102-90= 12
 
-        Vector<QnABean> v = tdao.getAllBoard(start, end);
-        number = count - (currentPage - 1) * pageSize;
+        Vector<QnABean> v = tdao.getAllBoard(start, end); // 1~10(10), 11~20(7), 91~100(10)
 
         HttpSession session = request.getSession();
         String qid = (String) session.getAttribute("id");
@@ -57,8 +57,8 @@ public class QnA extends HttpServlet {
         QnABean qnabean = new QnABean();
         qnabean.setQid(qid);
 
-        request.setAttribute("v", v);
-        request.setAttribute("number", number);
+        request.setAttribute("v", v);                                   // 게시글 리스트
+        request.setAttribute("number", number);                         // 
         request.setAttribute("check", request.getParameter("check"));
         request.setAttribute("currentPage", currentPage);
         request.setAttribute("pageSize", pageSize);

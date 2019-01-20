@@ -41,10 +41,14 @@
     
                                 <tr>
                                     <td style="text-align: center; vertical-align: middle;">${number}</td>
-                                    <td><c:if test="${bean.qstep>1 }">
-                                            <c:forEach begin="1" end="${(bean.qstep-1)*5 }">&nbsp;
+                                    <td>
+                                        <c:if test="${bean.qstep>1 }">
+                                            <c:forEach begin="1" end="${(bean.qstep-1)*5 }">
+                                                &nbsp;
                                             </c:forEach>
-                                        </c:if> <a href="QnAInfo.do?qno=${bean.qno}" style="text-decoration: none">${bean.qsubject}</a></td>
+                                        </c:if>
+                                        <a href="QnAInfo.do?qno=${bean.qno}" style="text-decoration: none">${bean.qsubject}</a>
+                                    </td>
                                     <td style="text-align: center; vertical-align: middle;">${bean.qid}</td>
                                     <td style="text-align: center; vertical-align: middle;">${bean.qdate}</td>
                                     <td style="text-align: center; vertical-align: middle;">${bean.qcount}</td>
@@ -69,64 +73,58 @@
                     </div>
                 </div>
             </c:if>
-    
-            <center>
-                <c:if test="${count>0 }">
-                    <c:set var="pageCount" value="${count/pageSize+(count%pageSize==0 ? 0 : 1) }" />
-                    <!-- 시작 페이지 숫자를 지정 -->
-                    <c:set var="startPage" value="${1 }" />
-                    <c:if test="${currentPage%10 != 0 }">
-                        <fmt:parseNumber var="result" value="${currentPage/10 }" integerOnly="true" />
-                        <c:set var="startPage" value="${result*10+1 }" />
+            
+            <nav style="text-align: center;">
+                <ul class="pagination">
+                    <c:if test="${ count > 0 }">
+                        <c:set var="pageCount" value="${count/pageSize+(count%pageSize==0 ? 0 : 1) }" />
+                        
+                        <!-- 시작 페이지 숫자를 지정 -->
+                        <c:set var="startPage" value="${1}" />
+                        <c:if test="${currentPage%10 != 0 }">
+                            <fmt:parseNumber var="result" value="${currentPage/10 }" integerOnly="true" />
+                            <c:set var="startPage" value="${result*10+1 }" />
+                        </c:if>
+                        <c:if test="${currentPage%10 == 0 }">
+                            <fmt:parseNumber var="result" value="${currentPage/10 }" integerOnly="true" />
+                            <c:set var="startPage" value="${(result-1)*10+1 }" />
+                        </c:if>
+                        
+                        <!-- 화면에 표시할 카운터링을 설정 [1][2]...[10] -->
+                        <c:set var="pageBlock" value="${10 }" />
+                        <c:set var="endPage" value="${startPage+pageBlock-1 }" />
+                        
+                        <c:if test="${endPage>pageCount }">
+                            <c:set var="endPage" value="${pageCount}" />
+                        </c:if>
+                        
+                        <!-- 이전 링크 파악 -->
+                        <li <c:if test="${startPage<=10 }"> class="disabled" </c:if> >
+                            <a href="QnA.do?pageNum=${startPage-10 }" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        
+                        <!-- 현재 페이징 처리 -->
+                        <c:forEach var="i" begin="${startPage }" end="${endPage }">
+                            <li <c:if test="${i == currentPage }"> class="active" </c:if>>
+                                <a href="QnA.do?pageNum=${i}">${i}
+                                    <c:if test="${i == currentPage }"><span class="sr-only">(current)</span></c:if>
+                                </a>
+                            </li>
+                        </c:forEach>
+                        
+                        <!-- 다음 링크 파악 -->
+                        <li <c:if test="${endPage>=pageCount }"> class="disabled" </c:if> >
+                            <a href="QnA.do?pageNum=${startPage+10 }" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
                     </c:if>
-                    <c:if test="${currentPage%10 == 0 }">
-                        <c:set var="startPage" value="${(result-1)*10+1 }" />
-                    </c:if>
-    
-                    <!-- 화면에 표시할 카운터링을 설정 [1][2]...[10] -->
-                    <c:set var="pageBlock" value="${10 }" />
-                    <c:set var="endPage" value="${startPage+pageBlock-1 }" />
-    
-                    <c:if test="${endPage>pageCount }">
-                        <c:set var="endPage" value="${pageCount}" />
-                    </c:if>
-    
-                    <!-- 이전 링크 파악 -->
-                    <c:if test="${startPage>10 }">
-                        <a href="qnalist.do?pageNum=${startPage-10 }" style="text-decoration: none">[이전]</a>
-                    </c:if>
-    
-                    <!-- 현재 페이징 처리 -->
-                    <c:forEach var="i" begin="${startPage }" end="${endPage }">
-                        <a href="qnalist.do?pageNum=${i}" style="text-decoration: none">[${i}]</a>
-                    </c:forEach>
-    
-                    <!-- 다음 링크 파악 -->
-                    <c:if test="${endPage<pageCount }">
-                        <a href="qnalist.do?pageNum=${startPage+10 }" style="text-decoration: none">[다음]</a>
-                    </c:if>
-                </c:if>
-            </center>
-            <!-- <nav style="text-align: center;">
-    			  <ul class="pagination">
-    			    <li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
-    	    		
-    	    		<li class="active"><a href="#">1<span class="sr-only">(current)</span></a></li>
-    			    <li><a href="#">2</a></li>
-    			    <li><a href="#">3</a></li>
-    			    <li><a href="#">4</a></li>
-    			    <li><a href="#">5</a></li>
-    			    <li><a href="#">6</a></li>
-    			    <li><a href="#">7</a></li>
-    			    <li><a href="#">8</a></li>
-    			    <li><a href="#">9</a></li>
-    			    <li><a href="#">10</a></li>
-    			    
-    			    <li><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
-    			  </ul>
-    	  	  </nav> -->
-    
-        </div>
+                </ul>
+            </nav>
+
+    </div>
         <!-- end container  -->
     </main>
 
