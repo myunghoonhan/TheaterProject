@@ -9,75 +9,74 @@
 
 </head>
 <body>
-	<div id="map" style="width: 100%; height: 400px;"></div>
-	<script>
-
-var HOME_PATH = window.HOME_PATH || '.';
-
-var map = new naver.maps.Map(document.getElementById('map'), {
-    zoom: 11,
-    center: new naver.maps.LatLng("${bean.swido }", "${bean.skyungdo }")
-});
-
-var latlngs = [
-	new naver.maps.LatLng("${bean.swido }", "${bean.skyungdo }"),
-];
-
-var markerList = [];
-
-for (var i=0, ii=latlngs.length; i<ii; i++) {
-    var icon = {
-            url: HOME_PATH +'/img/example/sp_pins_spot_v3.png',
-            size: new naver.maps.Size(24, 37),
-            anchor: new naver.maps.Point(12, 37),
-            origin: new naver.maps.Point(i * 29, 0)
-        },
-        marker = new naver.maps.Marker({
-            position: latlngs[i],
-            map: map,
-            icon: icon,
-            shadow: {
-                url: HOME_PATH +'/img/example/shadow-pin_default.png',
-                size: new naver.maps.Size(40, 35),
-                origin: new naver.maps.Point(0, 0),
-                anchor: new naver.maps.Point(11, 35)
-            }
+    <div id="map" style="width: 100%; height: 400px;"></div>
+    <script>
+        var HOME_PATH = window.HOME_PATH || '.';
+        
+        var map = new naver.maps.Map(document.getElementById('map'), {
+            zoom: 11,
+            center: new naver.maps.LatLng("${bean.swido }", "${bean.skyungdo }")
         });
-
-    marker.set('seq', i);
-
-    markerList.push(marker);
-
-    marker.addListener('mouseover', onMouseOver);
-    marker.addListener('mouseout', onMouseOut);
-
-    icon = null;
-    marker = null;
-}
-
-function onMouseOver(e) {
-    var marker = e.overlay,
-        seq = marker.get('seq');
-
-    marker.setIcon({
-        url: HOME_PATH +'/img/example/sp_pins_spot_v3_over.png',
-        size: new naver.maps.Size(24, 37),
-        anchor: new naver.maps.Point(12, 37),
-        origin: new naver.maps.Point(seq * 29, 50)
-    });
-}
-
-function onMouseOut(e) {
-    var marker = e.overlay,
-        seq = marker.get('seq');
-
-    marker.setIcon({
-        url: HOME_PATH +'/img/example/sp_pins_spot_v3.png',
-        size: new naver.maps.Size(24, 37),
-        anchor: new naver.maps.Point(12, 37),
-        origin: new naver.maps.Point(seq * 29, 0)
-    });
-}
-</script>
+        
+        var latlngs = [
+        	new naver.maps.LatLng("${bean.swido }", "${bean.skyungdo }"),
+        ];
+        
+        var markerList = [];
+        
+        for (var i=0, ii=latlngs.length; i<ii; i++) {
+            var icon = {
+                    url: HOME_PATH +'/img/example/sp_pins_spot_v3.png',
+                    size: new naver.maps.Size(24, 37),
+                    anchor: new naver.maps.Point(12, 37),
+                    origin: new naver.maps.Point(i * 29, 0)
+                },
+                marker = new naver.maps.Marker({
+                    position: latlngs[i],
+                    map: map,
+                    icon: icon,
+                    shadow: {
+                        url: HOME_PATH +'/img/example/shadow-pin_default.png',
+                        size: new naver.maps.Size(40, 35),
+                        origin: new naver.maps.Point(0, 0),
+                        anchor: new naver.maps.Point(11, 35)
+                    }
+                });
+        
+            marker.set('seq', i);
+        
+            markerList.push(marker);
+        
+            marker.addListener('mouseover', onMouseOver);
+            marker.addListener('mouseout', onMouseOut);
+        
+            icon = null;
+            marker = null;
+        }
+        
+        function onMouseOver(e) {
+            var marker = e.overlay,
+                seq = marker.get('seq');
+        
+            marker.setIcon({
+                url: HOME_PATH +'/img/example/sp_pins_spot_v3_over.png',
+                size: new naver.maps.Size(24, 37),
+                anchor: new naver.maps.Point(12, 37),
+                origin: new naver.maps.Point(seq * 29, 50)
+            });
+        }
+        
+        function onMouseOut(e) {
+            var marker = e.overlay,
+                seq = marker.get('seq');
+        
+            marker.setIcon({
+                url: HOME_PATH +'/img/example/sp_pins_spot_v3.png',
+                size: new naver.maps.Size(24, 37),
+                anchor: new naver.maps.Point(12, 37),
+                origin: new naver.maps.Point(seq * 29, 0)
+            });
+        }
+    </script>
 </body>
 </html>
