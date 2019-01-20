@@ -18,20 +18,20 @@ import dto.QnABean;
  */
 @WebServlet("/Question.do")
 public class Question extends HttpServlet {
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
-		reqPro(request, response);
-	}
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        reqPro(request, response);
+    }
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
-		reqPro(request, response);
-	}
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        reqPro(request, response);
+    }
 
-	private void reqPro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		request.setCharacterEncoding("UTF-8");
-		response.setCharacterEncoding("UTF-8");
-		
-		RequestDispatcher dis = request.getRequestDispatcher("src/view/qnainsert.jsp");
-		dis.forward(request, response);
-	}
+    private void reqPro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
+        RequestDispatcher dis = request.getRequestDispatcher("src/view/qnainsert.jsp");
+        dis.forward(request, response);
+    }
 }

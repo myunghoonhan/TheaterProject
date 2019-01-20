@@ -14,25 +14,25 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet("/LoginOut.do")
 public class LogOut extends HttpServlet {
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)	throws ServletException, IOException {
-		reqpro(request, response);
-	}
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        reqpro(request, response);
+    }
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)	throws ServletException, IOException {
-		reqpro(request, response);
-	}
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        reqpro(request, response);
+    }
 
-	protected void reqpro(HttpServletRequest request, HttpServletResponse response)	throws ServletException, IOException {
+    protected void reqpro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		request.setCharacterEncoding("UTF-8");
-		response.setCharacterEncoding("UTF-8");
-		
-		String url = request.getParameter("url");
-		
-		HttpSession session = request.getSession(); //session객체 만들기
-		session.invalidate();
-		
-		response.sendRedirect(url);
-	}
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
+        String url = request.getParameter("url");
+
+        HttpSession session = request.getSession(); // session객체 만들기
+        session.invalidate();
+
+        response.sendRedirect(url);
+    }
 
 }

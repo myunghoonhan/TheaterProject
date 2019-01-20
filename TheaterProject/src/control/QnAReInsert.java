@@ -18,37 +18,37 @@ import dto.QnABean;
  */
 @WebServlet("/QnAReInsert.do")
 public class QnAReInsert extends HttpServlet {
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
-		reqPro(request, response);
-	}
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        reqPro(request, response);
+    }
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
-		reqPro(request, response);
-	}
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        reqPro(request, response);
+    }
 
-	private void reqPro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		request.setCharacterEncoding("UTF-8");
-		response.setCharacterEncoding("UTF-8");
-		
-		QnABean bean = new QnABean();
-		
-		HttpSession session = request.getSession();
-		String qid = (String) session.getAttribute("id");
-		
-		bean.setQsubject(request.getParameter("subject"));
-		bean.setQid(qid);
-		bean.setQpw(request.getParameter("pass"));
-		bean.setQcontents(request.getParameter("contents"));
-		bean.setQgroup(Integer.parseInt(request.getParameter("qgroup")));
-		bean.setQstep(Integer.parseInt(request.getParameter("qstep")));
-		bean.setQlevel(Integer.parseInt(request.getParameter("qlevel")));
-		
-		TheaterDao tdao = new TheaterDao();
-		
-		tdao.qnaReInsert(bean);
-		
-		RequestDispatcher dis = request.getRequestDispatcher("QnA.do");
-		dis.forward(request, response);
-	}
+    private void reqPro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
+        QnABean bean = new QnABean();
+
+        HttpSession session = request.getSession();
+        String qid = (String) session.getAttribute("id");
+
+        bean.setQsubject(request.getParameter("subject"));
+        bean.setQid(qid);
+        bean.setQpw(request.getParameter("pass"));
+        bean.setQcontents(request.getParameter("contents"));
+        bean.setQgroup(Integer.parseInt(request.getParameter("qgroup")));
+        bean.setQstep(Integer.parseInt(request.getParameter("qstep")));
+        bean.setQlevel(Integer.parseInt(request.getParameter("qlevel")));
+
+        TheaterDao tdao = new TheaterDao();
+
+        tdao.qnaReInsert(bean);
+
+        RequestDispatcher dis = request.getRequestDispatcher("QnA.do");
+        dis.forward(request, response);
+    }
 }

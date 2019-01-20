@@ -21,35 +21,34 @@ import dto.TmemberBean;
  */
 @WebServlet("/MyPage.do")
 public class MyPage extends HttpServlet {
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException {
-		reqPro(request,response);
-	}	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException {
-		reqPro(request,response);
-	}	
-	private void reqPro(HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException {
-		
-		request.setCharacterEncoding("UTF-8");
-		response.setCharacterEncoding("UTF-8");
-		
-		HttpSession session = request.getSession();
-		String id = (String) session.getAttribute("id");
-		
-		TheaterDao tdao = new TheaterDao();
-		
-		TmemberBean bean = tdao.getTmember(id);
-		
-		Vector<ShowBean> interestBean = tdao.getInterest(id);
-		
-		Vector<BookBean> bookbean = tdao.getBook(id);
-		request.setAttribute("TmemberBean", bean);
-		request.setAttribute("interestBean", interestBean);
-		request.setAttribute("bookbean", bookbean);
-		
-		RequestDispatcher dis = request.getRequestDispatcher("src/view/mypage.jsp");
-		dis.forward(request, response);
-	}
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        reqPro(request, response);
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        reqPro(request, response);
+    }
+
+    private void reqPro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
+        HttpSession session = request.getSession();
+        String id = (String) session.getAttribute("id");
+
+        TheaterDao tdao = new TheaterDao();
+
+        TmemberBean bean = tdao.getTmember(id);
+
+        Vector<ShowBean> interestBean = tdao.getInterest(id);
+
+        Vector<BookBean> bookbean = tdao.getBook(id);
+        request.setAttribute("TmemberBean", bean);
+        request.setAttribute("interestBean", interestBean);
+        request.setAttribute("bookbean", bookbean);
+
+        RequestDispatcher dis = request.getRequestDispatcher("src/view/mypage.jsp");
+        dis.forward(request, response);
+    }
 }

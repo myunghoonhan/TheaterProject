@@ -18,33 +18,34 @@ import dto.QnABean;
  */
 @WebServlet("/QnAInsert.do")
 public class QnAInsert extends HttpServlet {
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
-		reqPro(request, response);
-	}
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
-		reqPro(request, response);
-	}
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        reqPro(request, response);
+    }
 
-	private void reqPro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	
-		request.setCharacterEncoding("UTF-8");
-		response.setCharacterEncoding("UTF-8");
-		
-		QnABean bean = new QnABean();
-		HttpSession session = request.getSession();
-		String qid = (String) session.getAttribute("id");
-		
-		bean.setQid(qid);
-		bean.setQsubject(request.getParameter("subject"));
-		bean.setQpw(request.getParameter("pass"));
-		bean.setQcontents(request.getParameter("contents"));
-		
-		TheaterDao tdao = new TheaterDao();
-		
-		tdao.qnaInsert(bean);
-		
-		RequestDispatcher dis = request.getRequestDispatcher("QnA.do");
-		dis.forward(request, response);
-	}
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        reqPro(request, response);
+    }
+
+    private void reqPro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
+        QnABean bean = new QnABean();
+        HttpSession session = request.getSession();
+        String qid = (String) session.getAttribute("id");
+
+        bean.setQid(qid);
+        bean.setQsubject(request.getParameter("subject"));
+        bean.setQpw(request.getParameter("pass"));
+        bean.setQcontents(request.getParameter("contents"));
+
+        TheaterDao tdao = new TheaterDao();
+
+        tdao.qnaInsert(bean);
+
+        RequestDispatcher dis = request.getRequestDispatcher("QnA.do");
+        dis.forward(request, response);
+    }
 
 }

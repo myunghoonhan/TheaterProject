@@ -17,33 +17,31 @@ import dto.QnABean;
  */
 @WebServlet("/QnAUpdate2.do")
 public class QnAUpdate2 extends HttpServlet {
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		reqPro(request, response);
-	}
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        reqPro(request, response);
+    }
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		reqPro(request, response);
-	}
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        reqPro(request, response);
+    }
 
-	private void reqPro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		request.setCharacterEncoding("UTF-8");
-		response.setCharacterEncoding("UTF-8");
-		
-		String title = request.getParameter("title"); 
-		String qno = request.getParameter("qno");
-		String contents = request.getParameter("contents");
-		System.out.println(title+qno+contents);
-		QnABean bean = new QnABean();
-		TheaterDao tdao = new TheaterDao();
-		
-		bean = tdao.getOneboard(qno);
-		
-		tdao.updateqna2(bean, title, contents);
-		
-		RequestDispatcher dis = request.getRequestDispatcher("QnA.do");
-		dis.forward(request, response);
-	}
+    private void reqPro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
+        String title = request.getParameter("title");
+        String qno = request.getParameter("qno");
+        String contents = request.getParameter("contents");
+        System.out.println(title + qno + contents);
+        QnABean bean = new QnABean();
+        TheaterDao tdao = new TheaterDao();
+
+        bean = tdao.getOneboard(qno);
+
+        tdao.updateqna2(bean, title, contents);
+
+        RequestDispatcher dis = request.getRequestDispatcher("QnA.do");
+        dis.forward(request, response);
+    }
 }

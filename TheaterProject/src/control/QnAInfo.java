@@ -19,31 +19,31 @@ import dto.QnABean;
 @WebServlet("/QnAInfo.do")
 public class QnAInfo extends HttpServlet {
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
-		reqPro(request, response);
-	}
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        reqPro(request, response);
+    }
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
-		reqPro(request, response);
-	}
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        reqPro(request, response);
+    }
 
-	private void reqPro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		request.setCharacterEncoding("UTF-8");
-		response.setCharacterEncoding("UTF-8");
-		
-		String qno = request.getParameter("qno");
-		
-		HttpSession session = request.getSession();
-		String id = (String) session.getAttribute("id");
-		
-		TheaterDao tdao = new TheaterDao();
-		
-		QnABean bean = tdao.getOneboard(qno);
-		
-		request.setAttribute("bean", bean);
-		request.setAttribute("id", id);
-		RequestDispatcher dis = request.getRequestDispatcher("src/view/qnainfo.jsp");
-		dis.forward(request, response);
-	}
+    private void reqPro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
+        String qno = request.getParameter("qno");
+
+        HttpSession session = request.getSession();
+        String id = (String) session.getAttribute("id");
+
+        TheaterDao tdao = new TheaterDao();
+
+        QnABean bean = tdao.getOneboard(qno);
+
+        request.setAttribute("bean", bean);
+        request.setAttribute("id", id);
+        RequestDispatcher dis = request.getRequestDispatcher("src/view/qnainfo.jsp");
+        dis.forward(request, response);
+    }
 }

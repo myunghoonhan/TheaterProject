@@ -1,68 +1,68 @@
 package dto;
 
 public class TmemberBean {
-	
-	private String id;
-	private String pw;
-	private String name;
-	private String phone;
-	private String email;
-	private String profile;
-	private String temp;
 
-	public String getId() {
-		return id;
-	}
+    private String id;
+    private String pw;
+    private String name;
+    private String phone;
+    private String email;
+    private String profile;
+    private String temp;
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public String getPw() {
-		return pw;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public void setPw(String pw) {
-		this.pw = pw;
-	}
+    public String getPw() {
+        return pw;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setPw(String pw) {
+        this.pw = pw;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getPhone() {
-		return phone;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
+    public String getPhone() {
+        return phone;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public String getProfile() {
-		return profile;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public void setProfile(String profile) {
-		this.profile = profile;
-	}
+    public String getProfile() {
+        return profile;
+    }
 
-	public String getTemp() {
-		return temp;
-	}
+    public void setProfile(String profile) {
+        this.profile = profile;
+    }
 
-	public void setTemp(String temp) {
-		this.temp = temp;
-	}
+    public String getTemp() {
+        return temp;
+    }
+
+    public void setTemp(String temp) {
+        this.temp = temp;
+    }
 }
