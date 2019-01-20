@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import dao.TheaterDao;
 import dto.ShowBean;
 
@@ -18,6 +20,9 @@ import dto.ShowBean;
  */
 @WebServlet("/Main.do")
 public class Main extends HttpServlet {
+    
+    static Logger logger = Logger.getLogger(Main.class.getName());
+    
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         reqPro(request, response);
     }
@@ -27,6 +32,9 @@ public class Main extends HttpServlet {
     }
 
     private void reqPro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        logger.info("Entering application.");
+        logger.debug("Exiting application.");
 
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
