@@ -1,0 +1,193 @@
+1. DBMS_CRYPTO 패키지 생성
+
+설치 되어 있지 않을 경우 다음의 SQL을 수행해서 패키지를 생성한다.
+
+ 
+
+/$ORACLE_HOME/rdbms/admin/dbmsobtk.sql
+
+/$ORACLE_HOME/rdbms/admin/prvtobtk.plb
+
+ 
+
+2. SYS유저에서 사용할 패키지를 생성 함.
+
+
+
+테스트에서 사용 할 암호 키 값은 '12345678'을 사용한다.
+
+ 
+
+CREATE OR REPLACE PACKAGE pkg_crypto
+
+IS
+
+    FUNCTION encrypt ( input_string IN VARCHAR2 ) RETURN RAW;
+
+    FUNCTION decrypt ( input_string IN VARCHAR2 ) RETURN VARCHAR2;
+
+END pkg_crypto;
+
+/
+
+CREATE OR REPLACE PACKAGE BODY pkg_crypto
+
+IS
+
+-- 에러 발생시에 error code 와 message를 받기 위한 변수 지정.
+
+    SQLERRMSG   VARCHAR2(255);
+
+    SQLERRCDE   NUMBER;
+
+ 
+
+    FUNCTION encrypt (input_string IN VARCHAR2 )
+
+     RETURN RAW
+
+    IS
+
+   
+
+        key_data_raw        RAW(64);
+
+        converted_raw       RAW(64);
+
+        encrypted_raw       RAW(64);
+
+ 
+
+    BEGIN
+
+ 
+
+        -- 들어온 data 와 암호 키를 각각 RAW 로 변환한다.
+
+        converted_raw := UTL_I18N.STRING_TO_RAW(input_string , 'AL32UTF8');
+
+        key_data_raw  := UTL_I18N.STRING_TO_RAW(  '12345678' , 'AL32UTF8');
+
+ 
+
+        -- DBMS_CRYPTO.ENCRYPT 로 암호화 하여 encrypted_raw 에 저장.
+
+        encrypted_raw := DBMS_CRYPTO.ENCRYPT(  src => converted_raw ,
+
+                                               typ => DBMS_CRYPTO.DES_CBC_PKCS5 , -- typ 부분만 변경하면 원하는 알고리즘을 사용할 수 있다. key value byte 가 다 다르니 확인해야 한다.
+
+                                               key => key_data_raw ,
+
+                                               iv =>  NULL);
+
+       
+
+        RETURN encrypted_raw;
+
+    END encrypt;
+
+ 
+
+    FUNCTION decrypt (input_string IN VARCHAR2 )
+
+     RETURN VARCHAR2
+
+    IS
+
+        converted_string    VARCHAR2(64);
+
+        key_data_raw        RAW(64);
+
+        decrypted_raw       VARCHAR2(64);
+
+ 
+
+    BEGIN
+
+ 
+
+        key_data_raw     := UTL_I18N.STRING_TO_RAW(  '12345678' , 'AL32UTF8');
+
+       
+
+        decrypted_raw := DBMS_CRYPTO.DECRYPT( src => input_string ,
+
+                                              typ => DBMS_CRYPTO.DES_CBC_PKCS5 ,
+
+                                              key => key_data_raw ,
+
+                                              iv =>  NULL);
+
+ 
+
+        -- DBMS_CRYPTO.DECRYPT 수행 결과 나온 복호화 된 raw data를 varchar2로 변환하면 끝!
+
+        converted_string := UTL_I18N.RAW_TO_CHAR(decrypted_raw, 'AL32UTF8');
+
+ 
+
+        RETURN converted_string;
+
+    END decrypt ;
+
+END pkg_crypto;
+
+/
+
+ 
+
+3. 사용할 유저에게 실행 권한 부여
+
+기본적으로 DBMS_CRYPTO 패키지 권한 만 부여하면 되지만, 혹시 안 될 경우 두 개의 패키지에 대한 사용 권한을 준다.
+
+ 
+
+grant execute on pkg_crypto to soe;
+
+ 
+
+4. 테스트
+
+패키지가 정상적으로 생성되었는지 테스트
+
+ 
+
+SQL> select sys.pkg_crypto.encrypt ( 'test' ) from dual ;
+
+A04B686B118AF67B
+
+ 
+
+SQL> select sys.pkg_crypto.decrypt ( 'A04B686B118AF67B' ) from dual ;
+
+test
+
+ 
+
+SQL> create table test_crypto (id int , pwd varchar2(64)) ;
+
+ 
+
+SQL> insert into test_crypto values (1, sys.pkg_crypto.encrypt('password1') ) ;
+
+SQL> insert into test_crypto values (2, sys.pkg_crypto.encrypt('password2') ) ;
+
+SQL> commit ;
+
+ 
+
+SQL> select * from test_crypto ;
+
+1        8A65E0E80532B5FADACA597658B8E8E0
+
+2        8A65E0E80532B5FA6635EBCA6EB4D195
+
+ 
+
+SQL> select id , sys.pkg_crypto.decrypt(pwd) from test_crypto ;
+
+1        password1
+
+2        password2
+
+ 

@@ -61,7 +61,7 @@ public class TheaterDao {
         int x = -1;
 
         try {
-            String sql = "select pw from tmember where id=?";
+            String sql = "select sys.pkg_crypto.decrypt(pw) as pw from tmember where id=?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, id);
             rs = pstmt.executeQuery();
@@ -109,7 +109,8 @@ public class TheaterDao {
         connect();
 
         try {
-            String sql = "insert into tmember(id,pw,name,phone,email) values(?,?,?,?,?)";
+            String sql = "insert into tmember(id,pw,name,phone,email) values(?, sys.pkg_crypto.encrypt (?),?,?,?)";
+            
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, bean.getId());
             pstmt.setString(2, bean.getPw());
