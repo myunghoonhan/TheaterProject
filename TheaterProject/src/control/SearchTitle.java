@@ -38,7 +38,7 @@ public class SearchTitle extends HttpServlet {
         // 데이터 베이스 객체 생성후
         TheaterDao tdao = new TheaterDao();
 
-        String sql = "select * from show where sname like '%" + search + "%'";
+        String sql = "SELECT * FROM SHOWINFO WHERE sname LIKE '%" + search + "%'";
 
         // 해당 공연이 있는지 여부를 알아보는 메소드 호출 getSearchTitle(search)
         Vector<ShowBean> searchTitle = tdao.getSearchTitle(sql);

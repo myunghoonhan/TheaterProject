@@ -1,0 +1,590 @@
+-- MySQL TheaterProject DB 작업 2019.01.27 --
+
+-- START : 테이블 생성 --
+--------------------------------------------------------
+--  파일이 생성됨 - 일요일-1월-27-2019   
+--------------------------------------------------------
+--------------------------------------------------------
+--  DDL for Table BOOK
+--------------------------------------------------------
+
+  CREATE TABLE BOOK 
+   (	BNO INT, 
+	BID VARCHAR(30), 
+	BSNO VARCHAR(30), 
+	BSSDATE DATE, 
+	BPEOPLE INT, 
+	BTOTALPRICE INT
+   );
+--------------------------------------------------------
+--  DDL for Table FAVORITE
+--------------------------------------------------------
+
+  CREATE TABLE FAVORITE 
+   (	FID VARCHAR(30), 
+	FSNO VARCHAR(30), 
+	CLICKTIME DATE
+   );
+--------------------------------------------------------
+--  DDL for Table QNA
+--------------------------------------------------------
+
+  CREATE TABLE QNA 
+   (	QNO INT, 
+	QID VARCHAR(30), 
+	QPW VARCHAR(30), 
+	QSUBJECT VARCHAR(50), 
+	QCONTENTS VARCHAR(500), 
+	QDATE DATE, 
+	QGROUP INT, 
+	QSTEP INT, 
+	QLEVEL INT, 
+	QCOUNT INT
+   );
+--------------------------------------------------------
+--  DDL for Table REVIEW
+--------------------------------------------------------
+
+  CREATE TABLE REVIEW 
+   (	RID VARCHAR(30), 
+	RSNO VARCHAR(30), 
+	RCONTENTS VARCHAR(500), 
+	RDATE DATE
+   );
+--------------------------------------------------------
+--  DDL for Table SHOW
+--------------------------------------------------------
+
+  CREATE TABLE SHOW 
+   (	SNO VARCHAR(30), 
+	SNAME VARCHAR(50), 
+	SADDRESS VARCHAR(200), 
+	SPERIOD VARCHAR(50), 
+	SACTOR VARCHAR(300), 
+	SPRICE INT, 
+	STIME VARCHAR(50), 
+	STAB VARCHAR(30), 
+	SLOCATION VARCHAR(30),
+	SMAINIMG VARCHAR(200), 
+	SWIDO VARCHAR(15), 
+	SKYUNGDO VARCHAR(15), 
+	SLIKE INT, 
+	SUPDATE DATE, 
+	STEMP VARCHAR(30), 
+	SINTTEMP INT
+   );
+--------------------------------------------------------
+--  DDL for Table SHOWIMG
+--------------------------------------------------------
+
+  CREATE TABLE SHOWIMG 
+   (	SNO VARCHAR(30), 
+	SSUBIMG VARCHAR(200)
+   );
+--------------------------------------------------------
+--  DDL for Table SHOWSEAT
+--------------------------------------------------------
+
+  CREATE TABLE SHOWSEAT 
+   (	SSSNO VARCHAR(30), 
+	SSDATE DATE, 
+	SSSEAT INT
+   );
+--------------------------------------------------------
+--  DDL for Table TMEMBER
+--------------------------------------------------------
+
+  CREATE TABLE TMEMBER 
+   (	ID VARCHAR(30), 
+	PW VARCHAR(64), 
+	NAME VARCHAR(30), 
+	PHONE VARCHAR(30), 
+	EMAIL VARCHAR(50), 
+	PROFILE VARCHAR(200), 
+	TEMP VARCHAR(30)
+   );
+--------------------------------------------------------
+--  DDL for Index PK_SHOW
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX PK_SHOW ON SHOWINFO (SNO);
+--------------------------------------------------------
+--  DDL for Index PK_QNA
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX PK_QNA ON QNA (QNO);
+--------------------------------------------------------
+--  DDL for Index PK_FAVORITE
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX PK_FAVORITE ON FAVORITE (FID, FSNO);
+--------------------------------------------------------
+--  DDL for Index PK_REVIEW
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX PK_REVIEW ON REVIEW (RID, RSNO);
+--------------------------------------------------------
+--  DDL for Index PK_SHOWSEAT
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX PK_SHOWSEAT ON SHOWSEAT (SSSNO, SSDATE);
+--------------------------------------------------------
+--  DDL for Index PK_TMEMBER
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX PK_TMEMBER ON TMEMBER (ID);
+--------------------------------------------------------
+--  DDL for Index PK_BOOK
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX PK_BOOK ON BOOK (BNO);
+--------------------------------------------------------
+--  Constraints for Table SHOWIMG
+--------------------------------------------------------
+
+  ALTER TABLE SHOWIMG MODIFY SSUBIMG VARCHAR(200) NOT NULL;
+  ALTER TABLE SHOWIMG MODIFY SNO VARCHAR(30) NOT NULL;
+--------------------------------------------------------
+--  Constraints for Table TMEMBER
+--------------------------------------------------------
+
+  ALTER TABLE TMEMBER ADD CONSTRAINT PK_TMEMBER PRIMARY KEY (ID);
+  ALTER TABLE TMEMBER MODIFY EMAIL VARCHAR(50) NOT NULL;
+  ALTER TABLE TMEMBER MODIFY PHONE VARCHAR(30) NOT NULL;
+  ALTER TABLE TMEMBER MODIFY NAME VARCHAR(30) NOT NULL;
+  ALTER TABLE TMEMBER MODIFY PW VARCHAR(64) NOT NULL;
+  ALTER TABLE TMEMBER MODIFY ID VARCHAR(30) NOT NULL;
+--------------------------------------------------------
+--  Constraints for Table REVIEW
+--------------------------------------------------------
+
+  ALTER TABLE REVIEW ADD CONSTRAINT PK_REVIEW PRIMARY KEY (RID, RSNO);
+  ALTER TABLE REVIEW MODIFY RDATE DATE NOT NULL;
+  ALTER TABLE REVIEW MODIFY RCONTENTS VARCHAR(500) NOT NULL;
+  ALTER TABLE REVIEW MODIFY RSNO VARCHAR(30) NOT NULL;
+  ALTER TABLE REVIEW MODIFY RID VARCHAR(30) NOT NULL;
+--------------------------------------------------------
+--  Constraints for Table QNA
+--------------------------------------------------------
+
+  ALTER TABLE QNA ADD CONSTRAINT PK_QNA PRIMARY KEY (QNO);
+  ALTER TABLE QNA MODIFY QCOUNT INT NOT NULL;
+  ALTER TABLE QNA MODIFY QLEVEL INT NOT NULL;
+  ALTER TABLE QNA MODIFY QSTEP INT  NOT NULL;
+  ALTER TABLE QNA MODIFY QGROUP INT NOT NULL;
+  ALTER TABLE QNA MODIFY QDATE DATE NOT NULL;
+  ALTER TABLE QNA MODIFY QCONTENTS VARCHAR(500) NOT NULL;
+  ALTER TABLE QNA MODIFY QSUBJECT VARCHAR(50) NOT NULL;
+  ALTER TABLE QNA MODIFY QPW VARCHAR(30) NOT NULL;
+  ALTER TABLE QNA MODIFY QID VARCHAR(30) NOT NULL;
+  ALTER TABLE QNA MODIFY QNO INT NOT NULL;
+--------------------------------------------------------
+--  Constraints for Table SHOWSEAT
+--------------------------------------------------------
+
+  ALTER TABLE SHOWSEAT ADD CONSTRAINT PK_SHOWSEAT PRIMARY KEY (SSSNO, SSDATE);
+  ALTER TABLE SHOWSEAT MODIFY SSSEAT INT NOT NULL;
+  ALTER TABLE SHOWSEAT MODIFY SSDATE DATE NOT NULL;
+  ALTER TABLE SHOWSEAT MODIFY SSSNO VARCHAR(30) NOT NULL;
+--------------------------------------------------------
+--  Constraints for Table SHOW
+--------------------------------------------------------
+
+  ALTER TABLE SHOW ADD CONSTRAINT PK_SHOW PRIMARY KEY (SNO);
+  ALTER TABLE SHOW MODIFY SUPDATE DATE NOT NULL;
+  ALTER TABLE SHOW MODIFY SLIKE INT NOT NULL;
+  ALTER TABLE SHOW MODIFY SKYUNGDO VARCHAR(15) NOT NULL;
+  ALTER TABLE SHOW MODIFY SWIDO VARCHAR(15) NOT NULL;
+  ALTER TABLE SHOW MODIFY SMAINIMG VARCHAR(200) NOT NULL;
+  ALTER TABLE SHOW MODIFY SLOCATION VARCHAR(30) NOT NULL;
+  ALTER TABLE SHOW MODIFY STAB VARCHAR(30) NOT NULL;
+  ALTER TABLE SHOW MODIFY STIME VARCHAR(50) NOT NULL;
+  ALTER TABLE SHOW MODIFY SPRICE INT NOT NULL;
+  ALTER TABLE SHOW MODIFY SACTOR VARCHAR(300) NOT NULL;
+  ALTER TABLE SHOW MODIFY SPERIOD VARCHAR(50) NOT NULL;
+  ALTER TABLE SHOW MODIFY SADDRESS VARCHAR(200) NOT NULL;
+  ALTER TABLE SHOW MODIFY SNAME VARCHAR(50) NOT NULL;
+  ALTER TABLE SHOW MODIFY SNO VARCHAR(30) NOT NULL;
+--------------------------------------------------------
+--  Constraints for Table BOOK
+--------------------------------------------------------
+
+  ALTER TABLE BOOK ADD CONSTRAINT PK_BOOK PRIMARY KEY (BNO);
+  ALTER TABLE BOOK MODIFY BTOTALPRICE INT NOT NULL;
+  ALTER TABLE BOOK MODIFY BPEOPLE INT NOT NULL;
+  ALTER TABLE BOOK MODIFY BSSDATE DATE NOT NULL;
+  ALTER TABLE BOOK MODIFY BSNO VARCHAR(30) NOT NULL;
+  ALTER TABLE BOOK MODIFY BID VARCHAR(30) NOT NULL;
+  ALTER TABLE BOOK MODIFY BNO INT NOT NULL;
+--------------------------------------------------------
+--  Constraints for Table FAVORITE
+--------------------------------------------------------
+
+  ALTER TABLE FAVORITE ADD CONSTRAINT PK_FAVORITE PRIMARY KEY (FID, FSNO);
+  ALTER TABLE FAVORITE MODIFY CLICKTIME DATE NOT NULL;
+  ALTER TABLE FAVORITE MODIFY FSNO VARCHAR(30) NOT NULL;
+  ALTER TABLE FAVORITE MODIFY FID VARCHAR(30) NOT NULL;
+-- END : 테이블 생성 --
+
+
+
+
+
+
+-- START : 시퀀스 생생 --
+CREATE TABLE sequences ( name varchar(32), currval BIGINT UNSIGNED ) ENGINE=InnoDB;
+
+DELIMITER $$
+CREATE PROCEDURE `create_sequence`(IN the_name text)
+MODIFIES SQL DATA
+DETERMINISTIC
+BEGIN
+    DELETE FROM sequences WHERE name=the_name;
+    INSERT INTO sequences VALUES (the_name, 0);
+END
+
+ DELIMITER $$ 
+ CREATE FUNCTION `nextval`(the_namenextval varchar(32))
+ RETURNS BIGINT UNSIGNED
+ MODIFIES SQL DATA
+ DETERMINISTIC
+ BEGIN
+     DECLARE ret BIGINT UNSIGNED;
+     UPDATE sequences SET currval=currval+1 WHERE name=the_name;
+     SELECT currval INTO ret FROM sequences WHERE name=the_name limit 1;
+     RETURN ret;
+ END;
+  
+INSERT INTO sequences VALUES ('BOOK_SEQ', 0);
+INSERT INTO sequences VALUES ('QNA_SEQ', 0);
+-- END : 시퀀스 생생 --
+
+
+
+
+
+
+-- START : 인서트 --
+Insert into BOOK (BNO,BID,BSNO,BSSDATE,BPEOPLE,BTOTALPRICE) values (3,'theater','d10',STR_TO_DATE('17/02/03','%y/%m/%d'),1,0);
+
+Insert into FAVORITE (FID,FSNO,CLICKTIME) values ('theater','d10',STR_TO_DATE('19/01/21','%y/%m/%d'));
+
+ 
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (7,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),3,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (8,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),4,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (4,'theh1001','theh1001','theh1001','<p><strong>qqq</strong></p>',STR_TO_DATE('19/01/20','%y/%m/%d'),2,1,1,20);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (9,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),5,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (10,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),6,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (11,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),7,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (12,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),8,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (13,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),9,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (14,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),10,1,1,1);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (15,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),11,1,1,2);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (16,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),12,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (17,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),13,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (18,'theater','theater','theater','<p>768</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),14,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (19,'theater','theater','theater','<p>768</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),15,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (21,'theater','123','[답글]123','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),11,2,2,1);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (22,'theater','123','[답글] 123','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),10,2,2,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (23,'theater','123','[답글] 123','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),11,3,4,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (24,'theater','123','[답글] 123','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),11,3,3,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (25,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),16,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (26,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),17,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (27,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),18,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (28,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),19,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (29,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),20,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (30,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),21,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (31,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),22,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (32,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),23,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (33,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),24,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (34,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),25,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (35,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),26,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (36,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),27,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (37,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),28,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (38,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),29,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (39,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),30,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (40,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),31,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (41,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),32,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (42,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),33,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (43,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),34,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (44,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),35,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (45,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),36,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (46,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),37,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (47,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),38,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (48,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),39,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (49,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),40,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (50,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),41,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (51,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),42,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (52,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),43,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (53,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),44,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (54,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),45,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (55,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),46,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (56,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),47,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (57,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),48,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (58,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),49,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (59,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),50,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (60,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),51,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (61,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),52,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (62,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),53,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (63,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),54,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (64,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),55,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (65,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),56,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (66,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),57,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (67,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),58,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (68,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),59,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (69,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),60,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (70,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),61,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (71,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),62,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (72,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),63,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (73,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),64,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (75,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),65,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (78,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),66,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (79,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),67,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (80,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),68,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (81,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),69,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (82,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),70,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (83,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),71,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (84,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),72,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (85,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),73,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (86,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),74,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (87,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),75,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (88,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),76,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (89,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),77,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (90,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),78,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (91,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),79,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (92,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),80,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (93,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),81,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (94,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),82,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (95,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),83,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (96,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),84,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (97,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),85,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (98,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),86,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (99,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),87,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (100,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),88,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (101,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),89,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (102,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),90,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (103,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),91,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (104,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),92,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (105,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),93,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (106,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),94,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (107,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),95,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (108,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),96,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (109,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),97,1,1,0);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (123,'theater','1234','질문 잇어요~!!','<h1 style="text-align: center;"><strong><em>에디터 테스트~~~</em></strong></h1> ^^ ㅇ,,,,,,,,,,,,,,,,,,,',STR_TO_DATE('19/01/21','%y/%m/%d'),100,1,1,5);
+Insert into QNA (QNO,QID,QPW,QSUBJECT,QCONTENTS,QDATE,QGROUP,QSTEP,QLEVEL,QCOUNT) values (111,'theater','theater','theater','<p>123</p>',STR_TO_DATE('19/01/20','%y/%m/%d'),99,1,1,6);
+ 
+ 
+Insert into REVIEW (RID,RSNO,RCONTENTS,RDATE) values ('theh1001','a1','123',STR_TO_DATE('19/01/19','%y/%m/%d'));
+Insert into REVIEW (RID,RSNO,RCONTENTS,RDATE) values ('theater','d2','123',STR_TO_DATE('19/01/20','%y/%m/%d'));
+Insert into REVIEW (RID,RSNO,RCONTENTS,RDATE) values ('theater','a1','^^',STR_TO_DATE('19/01/21','%y/%m/%d'));
+Insert into REVIEW (RID,RSNO,RCONTENTS,RDATE) values ('theater','d10','^^',STR_TO_DATE('19/01/21','%y/%m/%d'));
+
+ 
+Insert into SHOWIMG (SNO,SSUBIMG) values ('a1','a1_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('a2','a2_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('a3','a3_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('a4','a4_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('a5','a5_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('a6','a6_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('a7','a7_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('a8','a8_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('a9','a9_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('a10','a10_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('b1','b1_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('b1','b1_2.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('b1','b1_3.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('b2','b2_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('b3','b3_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('b4','b4_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('b5','b5_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('b6','b6_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('b7','b7_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('b8','b8_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('b9','b9_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('b10','b10_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('b10','b10_2.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('c1','c1_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('c2','c2_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('c3','c3_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('c4','c4_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('c5','c5_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('c6','c6_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('c7','c7_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('c8','c8_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('c9','c9_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('c10','c10_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('d1','d1_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('d1','d1_2.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('d2','d2_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('d2','d2_2.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('d2','d2_3.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('d2','d2_4.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('d2','d2_5.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('d2','d2_6.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('d3','d3_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('d3','d3_2.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('d4','d4_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('d4','d4_2.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('d5','d5_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('d6','d6_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('d7','d7_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('d8','d8_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('d9','d9_1.jpg');
+Insert into SHOWIMG (SNO,SSUBIMG) values ('d10','d10_1.jpg');
+
+
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('a1','어반 뮤직콘서트','코엑스 오디토리움','2017.02.19','볼빤간사춘기 ,브로콜리너마저',77000,'오후 6시 00분','콘서트','기타','a1.jpg','37.512465','127.058822',0,STR_TO_DATE('17/01/12','%y/%m/%d'),null,0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('a2','어제의 소설','홍대 벨로주','2017.01.24','곽푸른하늘',28000,'오후 6시 30분','콘서트','홍대','a2.jpg','37.552384','126.918804',0,STR_TO_DATE('16/12/24','%y/%m/%d'),null,0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('a3','주머니스테이지','홍대 스텀프','2017.01.27','그냥, 윤딴딴',33000,'오후 8시 00분','콘서트','홍대','a3.jpg','37.552999','126.922707',0,STR_TO_DATE('16/12/27','%y/%m/%d'),null,0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('a4','일리네어 레코즈 6주년','예스24 라이브홀','2017.02.04','더콰이엇,도끼,빈지노,김효은,창모',66000,'오후 6시 00분','콘서트','홍대','a4.jpg','37.545748','127.107871',0,STR_TO_DATE('16/12/08','%y/%m/%d'),null,0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('a5','HYPE','홍대 클럽 크랙','2017.02.04','이바다',23000,'오후 7시 00분','콘서트','홍대','a5.jpg','37.548694','126.919208',0,STR_TO_DATE('16/11/28','%y/%m/%d'),null,0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('a6','only Ballad','부산문화회관 대극장','2017.02.04~02.05','이승환',100000,'오후 6시 00분','콘서트','기타','a6.jpg','35.127226','129.094003',0,STR_TO_DATE('16/11/03','%y/%m/%d'),null,0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('a7','오늘','마포아트센터 아트홀 맥','2017.02.11~02.12','짙은,스웨덴세탁소,안녕하신가영',66000,'오후 7시 00분','콘서트','기타','a7.jpg','37.549746','126.945498',0,STR_TO_DATE('16/12/18','%y/%m/%d'),null,0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('a8','롤링22주년기념공연','롤링홀','2017.02.11','백아연,소심한오빠들',50000,'오후 7시 00분','콘서트','기타','a8.jpg','37.548403','126.920224',0,STR_TO_DATE('17/01/01','%y/%m/%d'),null,0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('a9','divided by zero','웨스트브릿지','2017.01.22','3호선 버터플라이',45000,'오후 6시 00분','콘서트','홍대','a9.jpg','37.553839','126.926059',0,STR_TO_DATE('16/11/23','%y/%m/%d'),null,0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('a10','Live at the Recording Studio','이태원 마초스튜디오','2017.01.21','블루파프리카',40000,'오후 7시 00분','콘서트','기타','a10.jpg','37.534386','126.990151',0,STR_TO_DATE('16/12/23','%y/%m/%d'),null,0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('b1','맛있는 프로포즈','대학로 달달씨어터','2017.01.20~01.22','한혁진, 성욱, 박슬아, 이아름, 최기언',30000,'오후 8시 00분','연극','대학로','b1.jpg','37.582633','127.000588',0,STR_TO_DATE('17/01/12','%y/%m/%d'),' ',0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('b2','작업의 정석','대학로 연극 순위아트홀 1관','2017.01.23~01.25','김대우, 김창현, 장지희, 김사홍',40000,'오후 9시 00분','연극','대학로','b2.jpg','37.581801','127.002818',0,STR_TO_DATE('17/01/11','%y/%m/%d'),' ',0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('b3','나의 PS파트너','JH아트홀','2017.02.01~02.03','정영성, 김태경, 최우석, 엄선영, 지혜연, 김광석',30000,'오후 7시 00분','연극','대학로','b3.jpg','37.582910','127.002992',0,STR_TO_DATE('17/01/10','%y/%m/%d'),' ',0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('b4','사춘기 메들리','대학로 아트홀 1관','2017.02.11~02.15','황세건, 박새미나, 유정한',30000,'오후 5시 00분','연극','대학로','b4.jpg','37.584175','127.001921',0,STR_TO_DATE('17/01/13','%y/%m/%d'),' ',0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('b5','러브액츄얼리','대학로 마당세실극장','2017.02.15~02.18','최선웅, 김두현, 이범로, 김원희, 이새나',30000,'오후 8시 00분','연극','대학로','b5.jpg','37.578641','127.004647',0,STR_TO_DATE('17/01/13','%y/%m/%d'),' ',0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('b6','조각:사라진기억','댕로홀(두레홀 1관)','2017.02.20~02.22','이창용, 노승민, 김윤수, 이대연, 백미연, 이예슬',30000,'오후 10시 00분','연극','대학로','b6.jpg','37.582411','127.003206',0,STR_TO_DATE('17/01/13','%y/%m/%d'),' ',0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('b7','죽여주는이야기','대학로 환상극장','2017.03.15~03.19','윤토왕, 최종윤, 이주영, 박민우, 이연승',33000,'오후 7시 00분','연극','대학로','b7.jpg','37.578441','127.004697',0,STR_TO_DATE('17/01/09','%y/%m/%d'),' ',0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('b8','라이어 1탄','코엑스 아트홀','2017.01.20~01.26','김재익, 이강민, 정새롬, 이가윤, 김종호, 윤정훈',35000,'오후 6시 00분','연극','강남','b8.jpg','37.511221','127.060598',0,STR_TO_DATE('17/01/13','%y/%m/%d'),' ',0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('b9','그놈은 예뻤다','정태호소극장 PLAY','2017.01.25~01.27','정태호',30000,'오후 7시 00분','연극','홍대','b9.jpg','37.550849','126.923877',0,STR_TO_DATE('17/01/11','%y/%m/%d'),' ',0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('b10','룸넘버13','대학로 스타시티 콘텐츠룸','2017.02.01~02.03','이승용, 김보군, 변서윤, 김민지, 김아람, 최규식',30000,'오후 8시 00분','연극','대학로','b10.jpg','37.582013','126.000398',0,STR_TO_DATE('17/01/09','%y/%m/%d'),' ',0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('c1','이집트 보물전','국립중앙박물관 기획전시실','2017.02.01~02.03','(주최)국립중앙박물관',13000,'오전 9시 00분','전시회','기타','c1.jpg','37.520357','126.982735',0,STR_TO_DATE('16/01/10','%y/%m/%d'),' ',0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('c2','그래피티 뮤지엄쇼：위대한 낙서전','예술의전당 서울서예박물관','2017.02.23~02.25','(주최)예술의전당',10000,'오전 11시 00분','전시회','기타','c2.jpg','37.478413','127.012035',0,STR_TO_DATE('16/01/05','%y/%m/%d'),' ',0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('c3','프랑스 국립 오르세미술관전','예술의전당 한가람미술관 1층','2017.01.28~01.30','(주최)예술의전당',11000,'오전 11시 00분','전시회','기타','c3.jpg','37.478966','127.011771',0,STR_TO_DATE('16/01/01','%y/%m/%d'),' ',0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('c4','DIALOGUE IN THE DARK（어둠속의대화）','북촌 어둠속의대화','2017.01.20~01.22','(주최)북촌 어둠속의대화',27000,'오전 11시 00분','전시회','기타','c4.jpg','37.583460','126.984803',0,STR_TO_DATE('17/01/10','%y/%m/%d'),' ',0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('c5','클림트 인사이드','성수 S-FACTORY','2017.02.19~02.21','(주최)성수 S_FACTORY',10200,'오전 11시 00분','전시회','기타','c5.jpg','37.545288','127.055814',0,STR_TO_DATE('17/01/01','%y/%m/%d'),' ',0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('c6','다빈치 코덱스(Da Vinci Codex)','문화역서울284','2017.01.23~01.25','(주최)문화역서울284',17000,'오전 10시 00분','전시회','기타','c6.jpg','37.555792','126.970875',0,STR_TO_DATE('17/01/05','%y/%m/%d'),' ',0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('c7','브릭라이브 인 코리아 BRICKLIVE IN KOREA','일산 킨텍스(KINTEX) 제1전시장 2A Hall','2017.02.01~02.03','(주최)일산 킨텍스',9900,'오전 10시 00분','전시회','기타','c7.jpg','37.672140','126.744939',0,STR_TO_DATE('17/01/10','%y/%m/%d'),' ',0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('c8','기특한 정글 미술관','울산문화예술회관 2,3전시장','2017.02.05~02.07','(주최)울산문화예술회관',15000,'오전 10시 30분','전시회','기타','c8.jpg','35.543169','129.327324',0,STR_TO_DATE('17/01/08','%y/%m/%d'),' ',0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('c9','현대건축의 아버지 르 코르뷔지에展','예술의전당 한가람디자인미술관','2017.01.25~01.27','(주최)예술의전당',15000,'오전 11시 00분','전시회','기타','c9.jpg','37.480650','127.014129',0,STR_TO_DATE('17/01/11','%y/%m/%d'),' ',0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('c10','알폰스 무하展','예술의전당 한가람미술관 2층(3,4전시실)','2017.02.08~02.10','(주최)예술의전당',12750,'오전 11시 00분','전시회','기타','c10.jpg','37.478954','127.011856',0,STR_TO_DATE('17/01/03','%y/%m/%d'),' ',0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('d1','매직콘서트 더 시크릿','서울특별시 구로구 구로동 102 구로구민회관 강당','2017.02.10~02.12','(사)매직포커스',0,'오후 8시 00분','The-Ticket','기타','d1.jpg','37.497199','126.889489',0,STR_TO_DATE('17/01/10','%y/%m/%d'),' ',0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('d2','방화 수류정 달빛음악회','경기도 수원시 팔달구 매향동 수원천로392번길 44-6 방화수류정','2017.02.01~02.03','두번째달, 억스, 재비',0,'오후 6시 30분','The-Ticket','기타','d2.jpg','37.287732','127.018085',0,STR_TO_DATE('17/01/11','%y/%m/%d'),' ',0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('d3','미디어 플레이 그라운드','광주광역시 남구 구동 12 빛고을 시민문화관 1층 미디어놀이터','2017.02.11','(재)광주문화재단 주최',0,'오후 6시 00분','The-Ticket','기타','d3.jpg','35.148257','126.908626',0,STR_TO_DATE('17/01/09','%y/%m/%d'),' ',0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('d4','제2회 마음나누미 콘서트','서울특별시 광진구 능동 437-4 어린이대공원 와팝홀','2017.01.31','콴, 노을, 뉴올, 킹콩, 투탁, 루팡, 아웃사이더, 타이미, 하대륜, 큐리어스',0,'오후 6시 00분','The-Ticket','기타','d4.jpg','37.550914','127.079723',0,STR_TO_DATE('17/01/05','%y/%m/%d'),' ',0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('d5','LOVE 발렌타인 콘서트','경기도 성남시 분당구 야탑3동 753 성남아트센터 오페라하우스','2017.02.11','어반자카파, 스탠딩에그, 볼빨간사춘기, 이예준',0,'오후 7시 00분 ','The-Ticket','기타','d5.jpg','37.402822','127.130522',0,STR_TO_DATE('17/01/01','%y/%m/%d'),' ',0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('d6','신년음악회 공감의 시작 2017','서울특별시 강북구 번3동 산28-27 꿈의 숲 아트센터','2017.01.21','이희준, 프렐류드',0,'오후 5시 00분 ','The-Ticket','기타','d6.jpg','37.621398','127.038639',0,STR_TO_DATE('17/01/02','%y/%m/%d'),' ',0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('d7','창작산실 뮤지컬 광염 소나타','아트윈씨어터 ','2017.02.14~02.26','성두섭, 김경수, 이선근',0,'오후 7시 00분 ','The-Ticket','대학로','d7.jpg','37.580466','127.003945',0,STR_TO_DATE('17/01/11','%y/%m/%d'),' ',0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('d8','뮤직드라마-당신만이','서울특별시 종로구 명륜2가 21-35 한성아트홀 2관','2017.01.29','김태향,이병권,최정화,조영임,박세웅,김동원,최성애,이보라',0,'오후 8시 00분 ','The-Ticket','기타','d8.jpg','37.583953','126.999847',0,STR_TO_DATE('17/01/02','%y/%m/%d'),' ',0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('d9','수어지교2 - 권도윤','서울특별시 종로1.2.3.4가동 창덕궁 서울돈화문국악당','2017.02.09','권도윤',0,'오후 7시 30분 ','The-Ticket','기타','d9.jpg','37.577464','126.987891',0,STR_TO_DATE('17/01/02','%y/%m/%d'),' ',0);
+Insert into SHOWINFO (SNO,SNAME,SADDRESS,SPERIOD,SACTOR,SPRICE,STIME,STAB,SLOCATION,SMAINIMG,SWIDO,SKYUNGDO,SLIKE,SUPDATE,STEMP,SINTTEMP) values ('d10','지평선 아래 솟구치는 것들','서울특별시 마포구 대흥동 백범로 35 서강대학교 메리홀 대극장','2017.02.03~02.04','창작집단',0,'오후 8시 00분 ','The-Ticket','기타','d10.jpg','37.551592','126.940785',1,STR_TO_DATE('17/01/12','%y/%m/%d'),' ',0);
+ 
+ 
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('a1',STR_TO_DATE('17/02/19','%y/%m/%d'),99);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('a2',STR_TO_DATE('17/01/24','%y/%m/%d'),100);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('a3',STR_TO_DATE('17/01/27','%y/%m/%d'),130);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('a4',STR_TO_DATE('17/02/04','%y/%m/%d'),200);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('a5',STR_TO_DATE('17/02/04','%y/%m/%d'),100);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('a6',STR_TO_DATE('17/02/04','%y/%m/%d'),200);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('a6',STR_TO_DATE('17/02/05','%y/%m/%d'),200);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('a7',STR_TO_DATE('17/02/11','%y/%m/%d'),300);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('a7',STR_TO_DATE('17/02/12','%y/%m/%d'),300);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('a8',STR_TO_DATE('17/02/11','%y/%m/%d'),150);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('a9',STR_TO_DATE('17/01/22','%y/%m/%d'),120);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('a10',STR_TO_DATE('17/01/21','%y/%m/%d'),80);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b1',STR_TO_DATE('17/01/20','%y/%m/%d'),30);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b1',STR_TO_DATE('17/01/21','%y/%m/%d'),30);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b1',STR_TO_DATE('17/01/22','%y/%m/%d'),30);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b2',STR_TO_DATE('17/01/23','%y/%m/%d'),40);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b2',STR_TO_DATE('17/01/24','%y/%m/%d'),40);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b2',STR_TO_DATE('17/01/25','%y/%m/%d'),40);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b3',STR_TO_DATE('17/02/01','%y/%m/%d'),30);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b3',STR_TO_DATE('17/02/02','%y/%m/%d'),30);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b3',STR_TO_DATE('17/02/03','%y/%m/%d'),30);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b4',STR_TO_DATE('17/02/11','%y/%m/%d'),20);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b4',STR_TO_DATE('17/02/12','%y/%m/%d'),20);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b4',STR_TO_DATE('17/02/13','%y/%m/%d'),20);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b4',STR_TO_DATE('17/02/14','%y/%m/%d'),20);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b4',STR_TO_DATE('17/02/15','%y/%m/%d'),20);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b5',STR_TO_DATE('17/02/15','%y/%m/%d'),50);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b5',STR_TO_DATE('17/02/16','%y/%m/%d'),50);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b5',STR_TO_DATE('17/02/17','%y/%m/%d'),50);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b5',STR_TO_DATE('17/02/18','%y/%m/%d'),50);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b6',STR_TO_DATE('17/02/20','%y/%m/%d'),20);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b6',STR_TO_DATE('17/02/21','%y/%m/%d'),20);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b6',STR_TO_DATE('17/02/22','%y/%m/%d'),20);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b7',STR_TO_DATE('17/03/15','%y/%m/%d'),50);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b7',STR_TO_DATE('17/03/16','%y/%m/%d'),50);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b7',STR_TO_DATE('17/03/17','%y/%m/%d'),50);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b7',STR_TO_DATE('17/03/18','%y/%m/%d'),50);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b7',STR_TO_DATE('17/03/19','%y/%m/%d'),50);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b8',STR_TO_DATE('17/01/20','%y/%m/%d'),40);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b8',STR_TO_DATE('17/01/21','%y/%m/%d'),40);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b8',STR_TO_DATE('17/01/22','%y/%m/%d'),40);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b8',STR_TO_DATE('17/01/23','%y/%m/%d'),40);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b8',STR_TO_DATE('17/01/24','%y/%m/%d'),40);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b8',STR_TO_DATE('17/01/25','%y/%m/%d'),40);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b8',STR_TO_DATE('17/01/26','%y/%m/%d'),40);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b9',STR_TO_DATE('17/01/25','%y/%m/%d'),60);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b9',STR_TO_DATE('17/01/26','%y/%m/%d'),60);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b9',STR_TO_DATE('17/01/27','%y/%m/%d'),60);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b10',STR_TO_DATE('17/02/01','%y/%m/%d'),30);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b10',STR_TO_DATE('17/02/02','%y/%m/%d'),30);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('b10',STR_TO_DATE('17/02/03','%y/%m/%d'),30);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('c1',STR_TO_DATE('17/02/01','%y/%m/%d'),500);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('c1',STR_TO_DATE('17/02/02','%y/%m/%d'),500);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('c1',STR_TO_DATE('17/02/03','%y/%m/%d'),500);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('c2',STR_TO_DATE('17/02/23','%y/%m/%d'),500);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('c2',STR_TO_DATE('17/02/24','%y/%m/%d'),500);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('c2',STR_TO_DATE('17/02/25','%y/%m/%d'),500);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('c3',STR_TO_DATE('17/01/28','%y/%m/%d'),500);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('c3',STR_TO_DATE('17/01/29','%y/%m/%d'),500);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('c3',STR_TO_DATE('17/01/30','%y/%m/%d'),500);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('c4',STR_TO_DATE('17/01/20','%y/%m/%d'),500);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('c4',STR_TO_DATE('17/01/21','%y/%m/%d'),500);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('c4',STR_TO_DATE('17/01/22','%y/%m/%d'),500);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('c5',STR_TO_DATE('17/02/19','%y/%m/%d'),500);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('c5',STR_TO_DATE('17/02/20','%y/%m/%d'),500);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('c5',STR_TO_DATE('17/02/21','%y/%m/%d'),500);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('c6',STR_TO_DATE('17/01/23','%y/%m/%d'),500);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('c6',STR_TO_DATE('17/01/24','%y/%m/%d'),500);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('c6',STR_TO_DATE('17/01/25','%y/%m/%d'),500);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('c7',STR_TO_DATE('17/02/01','%y/%m/%d'),500);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('c7',STR_TO_DATE('17/02/02','%y/%m/%d'),500);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('c7',STR_TO_DATE('17/02/03','%y/%m/%d'),500);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('c8',STR_TO_DATE('17/02/05','%y/%m/%d'),500);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('c8',STR_TO_DATE('17/02/06','%y/%m/%d'),500);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('c8',STR_TO_DATE('17/02/07','%y/%m/%d'),500);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('c9',STR_TO_DATE('17/01/25','%y/%m/%d'),500);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('c9',STR_TO_DATE('17/01/26','%y/%m/%d'),500);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('c9',STR_TO_DATE('17/01/27','%y/%m/%d'),500);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('c10',STR_TO_DATE('17/02/08','%y/%m/%d'),500);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('c10',STR_TO_DATE('17/02/09','%y/%m/%d'),500);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('c10',STR_TO_DATE('17/02/10','%y/%m/%d'),500);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('d1',STR_TO_DATE('17/02/10','%y/%m/%d'),50);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('d1',STR_TO_DATE('17/02/11','%y/%m/%d'),50);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('d1',STR_TO_DATE('17/02/12','%y/%m/%d'),50);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('d2',STR_TO_DATE('17/02/01','%y/%m/%d'),50);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('d2',STR_TO_DATE('17/02/02','%y/%m/%d'),50);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('d2',STR_TO_DATE('17/02/03','%y/%m/%d'),50);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('d3',STR_TO_DATE('17/02/11','%y/%m/%d'),500);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('d4',STR_TO_DATE('17/01/31','%y/%m/%d'),15);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('d5',STR_TO_DATE('17/02/11','%y/%m/%d'),20);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('d6',STR_TO_DATE('17/01/21','%y/%m/%d'),60);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('d7',STR_TO_DATE('17/02/14','%y/%m/%d'),20);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('d7',STR_TO_DATE('17/02/15','%y/%m/%d'),20);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('d7',STR_TO_DATE('17/02/16','%y/%m/%d'),20);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('d7',STR_TO_DATE('17/02/17','%y/%m/%d'),20);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('d7',STR_TO_DATE('17/02/18','%y/%m/%d'),20);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('d7',STR_TO_DATE('17/02/19','%y/%m/%d'),20);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('d7',STR_TO_DATE('17/02/20','%y/%m/%d'),20);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('d7',STR_TO_DATE('17/02/21','%y/%m/%d'),20);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('d7',STR_TO_DATE('17/02/22','%y/%m/%d'),20);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('d7',STR_TO_DATE('17/02/23','%y/%m/%d'),20);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('d7',STR_TO_DATE('17/02/24','%y/%m/%d'),20);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('d7',STR_TO_DATE('17/02/25','%y/%m/%d'),20);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('d7',STR_TO_DATE('17/02/26','%y/%m/%d'),20);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('d8',STR_TO_DATE('17/01/29','%y/%m/%d'),80);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('d9',STR_TO_DATE('17/02/09','%y/%m/%d'),40);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('d10',STR_TO_DATE('17/02/03','%y/%m/%d'),39);
+Insert into SHOWSEAT (SSSNO,SSDATE,SSSEAT) values ('d10',STR_TO_DATE('17/02/04','%y/%m/%d'),40);
+ 
+ 
+Insert into TMEMBER (ID,PW,NAME,PHONE,EMAIL,PROFILE,TEMP) values ('theater','1234','한명훈','01093838149','theh1001@hanmail.net','0033.JPG',null);
+Insert into TMEMBER (ID,PW,NAME,PHONE,EMAIL,PROFILE,TEMP) values ('theh1001','theater','한명훈','01012341234','theh1001@hanmail.net','004.JPG',null);
+-- END : 인서트 --

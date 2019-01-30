@@ -1,14 +1,10 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.Vector;
-
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
 
 import dto.BookBean;
 import dto.QnABean;
@@ -19,30 +15,32 @@ import dto.ShowSeatBean;
 import dto.TmemberBean;
 
 public class TheaterDao {
-
+    
+    static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
+    static final String url         = "jdbc:mysql://localhost:3306/theater";
+    
+    static String       USERNAME    = "root";
+    static String       PASSWORD    = "root";
+    
+    Connection          conn        = null;
+    PreparedStatement   pstmt       = null;
+    ResultSet           rs          = null;
+    
     private static TheaterDao instance = new TheaterDao();
-
+    
     public static TheaterDao getInstance() {
         return instance;
     }
-
-    Connection conn = null;
-    Statement stmt = null;
-    PreparedStatement pstmt = null;
-    ResultSet rs = null;
-    DataSource ds = null;
-
+    
     public void connect() {
         try {
-
-            Context initContext = new InitialContext();
-            ds = (DataSource) initContext.lookup("java:comp/env/jdbc/oracle");
-            conn = ds.getConnection();
-
+            Class.forName("com.mysql.jdbc.Driver");
+            conn = DriverManager.getConnection(url, USERNAME, PASSWORD);
         } catch (Exception e) {
             System.out.println(e);
         }
     }
+    
 
     public void disconnect() {
         try {
@@ -54,14 +52,19 @@ public class TheaterDao {
         }
     }
 
-    public int userCheck(String id, String pw) { // 로그인시 (LoginProc.java) 아이디 및
-                                                 // 비번 체크 (완료)
+    public int userCheck(String id, String pw) { // 로그인시 (LoginProc.java) 아이디 및 비번 체크 (완료)
         connect();
         String dbpasswd = null;
         int x = -1;
 
         try {
-            String sql = "select sys.pkg_crypto.decrypt(pw) as pw from tmember where id=?";
+            String sql = 
+                      " SELECT                                "
+                    + "      pw                               "
+                    + " FROM                                  "
+                    + "      TMEMBER                          "
+                    + " WHERE 1=1                             "
+                    + " AND id = ?                            ";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, id);
             rs = pstmt.executeQuery();
@@ -89,7 +92,13 @@ public class TheaterDao {
         connect();
         int count = 0;
         try {
-            String sql = "select count(*) from tmember where id=?";
+            String sql = 
+                      " SELECT          "
+                    + "     COUNT(*)    "
+                    + " FROM            "
+                    + "     TMEMBER     "
+                    + " WHERE 1=1       "
+                    + " AND id = ?      ";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, id);
             rs = pstmt.executeQuery();
@@ -109,7 +118,20 @@ public class TheaterDao {
         connect();
 
         try {
-            String sql = "insert into tmember(id,pw,name,phone,email) values(?, sys.pkg_crypto.encrypt (?),?,?,?)";
+            String sql = 
+                      " INSERT INTO TMEMBER (            "
+                    + "       id                         "
+                    + "     , pw                         "
+                    + "     , name                       "
+                    + "     , phone                      "
+                    + "     , email                      "
+                    + " ) VALUES (                       "
+                    + "       ?                          "
+                    + "     , ?                          "
+                    + "     , ?                          "
+                    + "     , ?                          "
+                    + "     , ?                          "
+                    + ")                                 ";
             
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, bean.getId());
@@ -135,7 +157,14 @@ public class TheaterDao {
         TmemberBean bean = new TmemberBean();
 
         try {
-            pstmt = conn.prepareStatement("select * from tmember where id=?");
+            String sql = 
+                      " SELECT          "
+                    + "     *           "
+                    + " FROM            "
+                    + "     TMEMBER     "
+                    + " WHERE 1=1       "
+                    + " AND id = ?      ";
+            pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, id);
             rs = pstmt.executeQuery();
 
@@ -160,15 +189,25 @@ public class TheaterDao {
 
         try {
             if (bean.getProfile() == null) {
-                String sql = "update tmember set pw=?, name=?, phone=? where id=?";
+                String sql = 
+                          " UPDATE TMEMBER SET  "
+                        + "       pw    = ?     "
+                        + "     , name  = ?     "
+                        + "     , phone = ?     "
+                        + " WHERE id = ?        ";
                 pstmt = conn.prepareStatement(sql);
-
                 pstmt.setString(1, bean.getPw());
                 pstmt.setString(2, bean.getName());
                 pstmt.setString(3, bean.getPhone());
                 pstmt.setString(4, bean.getId());
             } else {
-                String sql = "update tmember set pw=?, name=?, phone=?, profile=? where id=?";
+                String sql = 
+                          " UPDATE TMEMBER SET   "
+                        + "       pw      = ?    "
+                        + "     , name    = ?    "
+                        + "     , phone   = ?    "
+                        + "     , profile = ?    "
+                        + " WHERE id = ?         ";
                 pstmt = conn.prepareStatement(sql);
                 pstmt.setString(1, bean.getPw());
                 pstmt.setString(2, bean.getName());
@@ -198,7 +237,24 @@ public class TheaterDao {
         ShowBean bean = null;
         try {
             // 3.
-            String sql = "select * from (select A.* , Rownum rnum from" + " (select * from show order by slike desc)A) where rnum <=4";
+            String sql = 
+                      " SELECT                                                  "
+                    + "     *                                                   "
+                    + " FROM                                                    "
+                    + "     ( SELECT                                            "
+                    + "             A.*                                         "
+                    + "           , @r:=@r+1 AS rnum                            "
+                    + "       FROM                                              "
+                    + "            ( SELECT                                     "
+                    + "                  *                                      "
+                    + "              FROM                                       "
+                    + "                  SHOWINFO                               "
+                    + "              ORDER BY slike DESC                        "
+                    + "            ) A                                          "
+                    + "          , ( SELECT @r:=0 ) r                           "
+                    + "     ) C                                                 "
+                    + " WHERE 1=1                                               "
+                    + " AND rnum <= 4                                           ";
             pstmt = conn.prepareStatement(sql);
             // 4.쿼리실행후 결과를 리턴
             rs = pstmt.executeQuery();
@@ -244,7 +300,25 @@ public class TheaterDao {
         ShowBean bean = null;
         try {
             // 3.
-            String sql = "select * from (select A.* , Rownum rnum from" + " (select * from show order by supdate desc)A) where rnum <=12";
+            String sql = 
+                    
+                    " SELECT                                                  "
+                  + "     *                                                   "
+                  + " FROM                                                    "
+                  + "     ( SELECT                                            "
+                  + "             A.*                                         "
+                  + "           , @r:=@r+1 AS rnum                            "
+                  + "       FROM                                              "
+                  + "            ( SELECT                                     "
+                  + "                  *                                      "
+                  + "              FROM                                       "
+                  + "                  SHOWINFO                               "
+                  + "              ORDER BY supdate DESC                      "
+                  + "            ) A                                          "
+                  + "          , ( SELECT @r:=0 ) r                           "
+                  + "     ) C                                                 "
+                  + " WHERE 1=1                                               "
+                  + " AND rnum <= 12                                          ";
             pstmt = conn.prepareStatement(sql);
             // 4.쿼리실행후 결과를 리턴
             rs = pstmt.executeQuery();
@@ -290,8 +364,25 @@ public class TheaterDao {
         ShowBean bean = null;
         try {
             // 3.
-            String sql = "select * from (select A.* , Rownum rnum from" + " (select * from show where stab=? order by slike desc)A) where rnum <=4";
-
+            String sql = 
+                    " SELECT                                                  "
+                  + "     *                                                   "
+                  + " FROM                                                    "
+                  + "     ( SELECT                                            "
+                  + "             A.*                                         "
+                  + "           , @r:=@r+1 AS rnum                            "
+                  + "       FROM                                              "
+                  + "            ( SELECT                                     "
+                  + "                  *                                      "
+                  + "              FROM                                       "
+                  + "                  SHOWINFO                               "
+                  + "              WHERE stab = ?                               "
+                  + "              ORDER BY slike DESC                        "
+                  + "            ) A                                          "
+                  + "          , ( SELECT @r:=0 ) r                           "
+                  + "     ) C                                                 "
+                  + " WHERE 1=1                                               "
+                  + " AND rnum <= 4                                           ";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, gubun);
 
@@ -340,7 +431,25 @@ public class TheaterDao {
         ShowBean bean = null;
         try {
             // 3.
-            String sql = "select * from (select A.* , Rownum rnum from" + " (select * from show where stab=? order by supdate desc)A) where rnum <=30";
+            String sql = 
+                    " SELECT                                                  "
+                  + "     *                                                   "
+                  + " FROM                                                    "
+                  + "     ( SELECT                                            "
+                  + "             A.*                                         "
+                  + "           , @r:=@r+1 AS rnum                            "
+                  + "       FROM                                              "
+                  + "            ( SELECT                                     "
+                  + "                  *                                      "
+                  + "              FROM                                       "
+                  + "                  SHOWINFO                               "
+                  + "              WHERE stab = ?                               "
+                  + "              ORDER BY supdate DESC                      "
+                  + "            ) A                                          "
+                  + "          , ( SELECT @r:=0 ) r                           "
+                  + "     ) C                                                 "
+                  + " WHERE 1=1                                               "
+                  + " AND rnum <= 30                                          ";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, gubun);
 
@@ -383,7 +492,7 @@ public class TheaterDao {
 
         int count = 0;
         try {
-            String sql = "select count(*) from show where stab=?";
+            String sql = "SELECT COUNT(*) FROM  SHOWINFO WHERE stab = ?";
 
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, gubun);
@@ -410,8 +519,25 @@ public class TheaterDao {
         ShowBean bean = null;
         try {
             // 3.
-            String sql = "select * from (select A.* , Rownum rnum from" + " (select * from show where slocation=? order by slike desc)A) where rnum <=4";
-
+            String sql = 
+                    " SELECT                                                  "
+                  + "     *                                                   "
+                  + " FROM                                                    "
+                  + "     ( SELECT                                            "
+                  + "             A.*                                         "
+                  + "           , @r:=@r+1 AS rnum                            "
+                  + "       FROM                                              "
+                  + "            ( SELECT                                     "
+                  + "                  *                                      "
+                  + "              FROM                                       "
+                  + "                  SHOWINFO                               "
+                  + "              AND slocation = ?                          "
+                  + "              ORDER BY slike DESC                        "
+                  + "            ) A                                          "
+                  + "          , ( SELECT @r:=0 ) r                           "
+                  + "     ) C                                                 "
+                  + " WHERE 1=1                                               "
+                  + " AND rnum <= 4                                           ";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, gubunLocation);
 
@@ -459,7 +585,25 @@ public class TheaterDao {
         ShowBean bean = null;
         try {
             // 3.
-            String sql = "select * from (select A.* , Rownum rnum from" + " (select * from show where slocation=? order by supdate desc)A) where rnum <=30";
+            String sql = 
+                    " SELECT                                                  "
+                  + "     *                                                   "
+                  + " FROM                                                    "
+                  + "     ( SELECT                                            "
+                  + "             A.*                                         "
+                  + "           , @r:=@r+1 AS rnum                            "
+                  + "       FROM                                              "
+                  + "            ( SELECT                                     "
+                  + "                  *                                      "
+                  + "              FROM                                       "
+                  + "                  SHOWINFO                               "
+                  + "              AND slocation = ?                          "
+                  + "              ORDER BY supdate DESC                      "
+                  + "            ) A                                          "
+                  + "          , ( SELECT @r:=0 ) r                           "
+                  + "     ) C                                                 "
+                  + " WHERE 1=1                                               "
+                  + " AND rnum <= 30                                          ";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, gubunLocation);
 
@@ -502,7 +646,7 @@ public class TheaterDao {
 
         int count = 0;
         try {
-            String sql = "select count(*) from show where slocation=?";
+            String sql = "SELECT COUNT(*) FROM SHOWINFO WHERE slocation=?";
 
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, gubunLocation);
@@ -570,7 +714,7 @@ public class TheaterDao {
 
         ShowBean bean = null;
         try {
-            String sql = "select * from show where sno=?";
+            String sql = "SELECT * FROM SHOWINFO WHERE sno=?";
 
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, sno);
@@ -610,7 +754,7 @@ public class TheaterDao {
 
         int result = 0;
         try {
-            String sql = "select count(*) from favorite where fsno=? and fid=?";
+            String sql = "SELECT COUNT(*) FROM FAVORITE WHERE fsno=? AND fid=?";
 
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, sno);
@@ -636,7 +780,7 @@ public class TheaterDao {
         ShowImgBean imgbean = null;
 
         try {
-            String sql = "select * from showimg where sno=?";
+            String sql = "SELECT * FROM SHOWIMG WHERE sno=?";
 
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, sno);
@@ -667,7 +811,16 @@ public class TheaterDao {
 
         try {
 
-            String sql = "select review.*, tmember.name, tmember.profile " + "from review left join tmember " + "on review.rid = tmember.id where review.rsno =?";
+            String sql = 
+                      " SELECT                          "
+                    + "       review.*                  "
+                    + "     , tmember.name              "
+                    + "     , tmember.profile           "
+                    + " FROM                            "
+                    + "     REVIEW LEFT JOIN TMEMBER    "
+                    + "     ON REVIEW.rid = TMEMBER.id  "
+                    + " WHERE 1=1                       "
+                    + " AND review.rsno = ?             ";
 
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, sno);
@@ -702,7 +855,7 @@ public class TheaterDao {
         ShowSeatBean bean = null;
 
         try {
-            String sql = "select * from showseat where sssno=?";
+            String sql = "SELECT * FROM SHOWSEAT WHERE sssno=?";
 
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, sno);
@@ -729,7 +882,7 @@ public class TheaterDao {
 
         String time = null;
         try {
-            String sql = "select stime from show where sno = ?";
+            String sql = "SELECT stime FROM SHOWINFO WHERE sno = ?";
 
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, sno);
@@ -750,7 +903,7 @@ public class TheaterDao {
         connect();
 
         try {
-            String sql = "insert into favorite values(?,?,sysdate)";
+            String sql = "INSERT INTO favorite VALUES(?,?,NOW())";
 
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, id);
@@ -759,7 +912,7 @@ public class TheaterDao {
             int result = pstmt.executeUpdate();
 
             if (result != 0) {
-                String sql2 = "update show set slike = slike + 1 where sno= ?";
+                String sql2 = "UPDATE  SHOWINFO  SET slike = slike + 1 WHERE sno= ?";
 
                 pstmt = conn.prepareStatement(sql2);
                 pstmt.setString(1, sno);
@@ -777,7 +930,7 @@ public class TheaterDao {
         connect();
 
         try {
-            String sql = "delete from favorite where fid=? and fsno=?";
+            String sql = "DELETE FROM favorite WHERE fid=? AND fsno=?";
 
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, id);
@@ -786,7 +939,7 @@ public class TheaterDao {
             int result = pstmt.executeUpdate();
 
             if (result != 0) {
-                String sql2 = "update show set slike = slike - 1 where sno= ?";
+                String sql2 = "UPDATE SHOWINFO SET slike = slike - 1 WHERE sno= ?";
 
                 pstmt = conn.prepareStatement(sql2);
                 pstmt.setString(1, sno);
@@ -805,7 +958,7 @@ public class TheaterDao {
         connect();
 
         try {
-            String sql = "insert into review values(?,?,?,sysdate)";
+            String sql = "INSERT INTO review VALUES(?,?,?,NOW())";
 
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, id);
@@ -826,7 +979,7 @@ public class TheaterDao {
 
         int sprice = 0;
         try {
-            String sql = "select sprice from show where sno=?";
+            String sql = "SELECT sprice FROM SHOWINFO WHERE sno=?";
 
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, sno);
@@ -851,7 +1004,22 @@ public class TheaterDao {
             String bssdate = bookDate.substring(0, 10);
             int totalprice = sprice * people;
 
-            String sql = "insert into book values(book_seq.nextval,?,?,?,?,?)";
+            String sql = 
+                        " INSERT INTO BOOK (               "
+                      + "       bno                        "
+                      + "     , bid                        "
+                      + "     , bsno                       "
+                      + "     , bssdate                    "
+                      + "     , bpeople                    "
+                      + "     , btotalprice                "
+                      + " ) VALUES (                       "
+                      + "       nextval('BOOK_SEQ')        "
+                      + "     , ?                          "
+                      + "     , ?                          "
+                      + "     , ?                          "
+                      + "     , ?                          "
+                      + "     , ?                          "
+                      + ")                                 ";
 
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, id);
@@ -874,7 +1042,7 @@ public class TheaterDao {
         int result = 0;
 
         try {
-            String sql = "select ssseat from showseat where sssno=? and ssdate=?";
+            String sql = "SELECT ssseat FROM showseat WHERE sssno=? AND ssdate=?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, sno);
             pstmt.setString(2, bssdate);
@@ -884,7 +1052,7 @@ public class TheaterDao {
             if (rs.next()) {
                 result = rs.getInt(1);
 
-                String sql_update = "update showseat set ssseat=? where sssno=? and ssdate=?";
+                String sql_update = "UPDATE showseat SET ssseat=? WHERE sssno=? AND ssdate=?";
                 pstmt = conn.prepareStatement(sql_update);
 
                 int ssseat = result - people;
@@ -909,7 +1077,7 @@ public class TheaterDao {
         TmemberBean bean = null;
 
         try {
-            String sql = "select * from tmember where id=?";
+            String sql = "SELECT * FROM tmember WHERE id=?";
 
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, id);
@@ -941,7 +1109,26 @@ public class TheaterDao {
         Vector<ShowBean> v = new Vector<>();
         ShowBean bean = null;
         try {
-            String sql = "select * from (select A.*, Rownum rnum from " + "(select favorite.*, show.smainimg from favorite left join show " + "on favorite.fsno = show.sno " + "where favorite.fid = ? order by favorite.clicktime desc) A) where rnum <=6";
+            String sql = 
+                          " SELECT                                        "
+                        + "     *                                         "
+                        + " FROM                                          "
+                        + "     (SELECT                                   "
+                        + "           A.*                                 "
+                        + "         , @r:=@r+1 AS rnum                    "
+                        + "      FROM                                     "
+                        + "         ( SELECT                              "
+                        + "                FAVORITE.*                     "
+                        + "              , SHOWINFO.smainimg              "
+                        + "           FROM                                "
+                        + "              FAVORITE LEFT JOIN SHOWINFO      "
+                        + "              ON FAVORITE.fsno = SHOWINFO.sno  "
+                        + "           WHERE FAVORITE.fid = ?              "
+                        + "           ORDER BY FAVORITE.clicktime DESC    "
+                        + "         ) A                                   "
+                        + "       , ( SELECT @r:=0 ) r                    "
+                        + "     ) B                                       "
+                        + " WHERE rnum <=6                                ";
 
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, id);
@@ -971,7 +1158,18 @@ public class TheaterDao {
         BookBean bean = null;
 
         try {
-            String sql = "select book.*, show.smainimg, show.slocation, show.sname, show.stime " + "from book left join show " + "on book.bsno = show.sno " + "where book.bid = ? order by book.bno desc";
+            String sql =
+                    " SELECT                        "
+                  + "     BOOK.*                    "
+                  + "   , SHOWINFO.smainimg         "
+                  + "   , SHOWINFO.slocation        "
+                  + "   , SHOWINFO.sname            "
+                  + "   , SHOWINFO.stime            "
+                  + " FROM BOOK LEFT JOIN SHOWINFO  "
+                  + " ON BOOK.bsno = SHOWINFO.sno   "
+                  + " WHERE 1=1                     "
+                  + " AND BOOK.bid = ?              "
+                  + " ORDER BY BOOK.bno DESC        ";
 
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, id);
@@ -1007,7 +1205,7 @@ public class TheaterDao {
         int a = 0;
 
         try {
-            String sql = "select count(*) from review where rid=? and rsno=?";
+            String sql = "SELECT COUNT(*) FROM review WHERE rid=? AND rsno=?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, id);
             pstmt.setString(2, sno);
@@ -1031,7 +1229,7 @@ public class TheaterDao {
         int ssseat = 0;
 
         try {
-            String sql = "select ssseat from showseat where sssno=? and ssdate=?";
+            String sql = "SELECT ssseat FROM showseat WHERE sssno=? AND ssdate=?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, sno);
             pstmt.setString(2, bssdate);
@@ -1041,7 +1239,7 @@ public class TheaterDao {
             if (rs.next()) {
                 result = rs.getInt(1);
 
-                String sql_delete = "delete from book where bno=?";
+                String sql_delete = "DELETE FROM book WHERE bno=?";
                 pstmt = conn.prepareStatement(sql_delete);
 
                 ssseat = result + people;
@@ -1062,7 +1260,7 @@ public class TheaterDao {
         connect();
 
         try {
-            String sql = "update showseat set ssseat=? where sssno=? and ssdate=?";
+            String sql = "UPDATE showseat SET ssseat=? WHERE sssno=? AND ssdate=?";
 
             pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, ssseat);
@@ -1081,7 +1279,7 @@ public class TheaterDao {
         connect();
         int count = 0;
         try {
-            String sql = "select count(*) from qna"; // �������Լ�
+            String sql = "SELECT COUNT(*) FROM QNA"; // �������Լ�
             pstmt = conn.prepareStatement(sql);
             rs = pstmt.executeQuery();
             if (rs.next())
@@ -1098,7 +1296,24 @@ public class TheaterDao {
         Vector<QnABean> v = new Vector<>();
         QnABean bean = null;
         try {
-            String sql = "select * from ( select A.* , Rownum AS Rnum from (select * from qna order by qgroup desc, qlevel  asc) A ) where Rnum >=?  and Rnum <=? ";
+            String sql = 
+                      " SELECT                                      "
+                    + "     *                                       "
+                    + " FROM                                        "
+                    + "     ( SELECT                                "
+                    + "           A.*                               "
+                    + "         , @r:=@r+1 AS rnum                  "
+                    + "       FROM                                  "
+                    + "         ( SELECT                            "
+                    + "               *                             "
+                    + "           FROM QNA                          "
+                    + "           ORDER BY qgroup DESC, qlevel ASC  "
+                    + "         ) A                                 "
+                    + "       , ( SELECT @r:=0 ) r                  "
+                    + "     ) B                                     "
+                    + " WHERE 1=1                                   "
+                    + " AND rnum >= ?                               "
+                    + " AND rnum <= ?                               ";
 
             pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, start);
@@ -1131,12 +1346,12 @@ public class TheaterDao {
         connect();
         QnABean bean = null;
         try {
-            String countsql = "update qna set qcount= qcount+1 where qno=?";
+            String countsql = "UPDATE QNA SET qcount= qcount+1 WHERE qno=?";
             pstmt = conn.prepareStatement(countsql);
             pstmt.setInt(1, Integer.parseInt(qno));
             pstmt.executeUpdate();
 
-            String sql = "select * from qna where qno=?";
+            String sql = "SELECT * FROM QNA WHERE qno=?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, Integer.parseInt(qno));
             rs = pstmt.executeQuery();
@@ -1170,7 +1385,7 @@ public class TheaterDao {
 
             if (bean.getQid() != null) {
 
-                String sql = "select max(qgroup) from qna";
+                String sql = "SELECT MAX(qgroup) FROM QNA";
                 pstmt = conn.prepareStatement(sql);
                 rs = pstmt.executeQuery();
 
@@ -1183,7 +1398,7 @@ public class TheaterDao {
                 bean.setQlevel(1);
                 bean.setQcount(0);
 
-                String insertsql = "insert into qna values(qna_seq.nextval,?,?,?,?,sysdate,?,?,?,?)";
+                String insertsql = "INSERT INTO QNA VALUES(nextval('QNA_SEQ'),?,?,?,?,NOW(),?,?,?,?)";
 
                 pstmt = conn.prepareStatement(insertsql);
                 pstmt.setString(1, bean.getQid());
@@ -1209,7 +1424,9 @@ public class TheaterDao {
         try {
             bean.setQstep(bean.getQstep() + 1);
 
-            String levelsql = "update qna set qlevel=qlevel+1" + "where qgroup=? and qlevel>?";
+            String levelsql = 
+                          " UPDATE QNA SET qlevel=qlevel+1 " 
+                        + " WHERE qgroup=? AND qlevel>?    ";
             pstmt = conn.prepareStatement(levelsql);
 
             pstmt.setInt(1, bean.getQgroup());// �θ�� �׷�
@@ -1219,7 +1436,7 @@ public class TheaterDao {
             bean.setQlevel(bean.getQlevel() + 1);
             bean.setQcount(0);// ī��Ʈ�� �ʱ�ȭ
 
-            String insertsql = "insert into qna values(qna_seq.nextval,?,?,?,?,sysdate,?,?,?,?)";
+            String insertsql = "INSERT INTO QNA VALUES(nextval('QNA_SEQ'),?,?,?,?,NOW(),?,?,?,?)";
 
             pstmt = conn.prepareStatement(insertsql);
             pstmt.setString(1, bean.getQid());
@@ -1242,7 +1459,7 @@ public class TheaterDao {
         connect();
         int check = 0;
         try {
-            String updatesql = "select * from qna where qno=? and qid=?";
+            String updatesql = "SELECT * FROM QNA WHERE qno=? AND qid=?";
             pstmt = conn.prepareStatement(updatesql);
             pstmt.setInt(1, Integer.parseInt(qno));
             pstmt.setString(2, id);
@@ -1261,7 +1478,7 @@ public class TheaterDao {
         connect();
 
         try {
-            String updatesql2 = "update qna set qdate=sysdate, qsubject=?,qcontents=? where qno=?";
+            String updatesql2 = "UPDATE QNA SET qdate=NOW(), qsubject=?,qcontents=? WHERE qno=?";
             pstmt = conn.prepareStatement(updatesql2);
             pstmt.setString(1, title);
             pstmt.setString(2, content);
@@ -1277,7 +1494,7 @@ public class TheaterDao {
         connect();
         int check = 0;
         try {
-            String delsql = "delete from qna where qno=? and qid=?";
+            String delsql = "DELETE FROM QNA WHERE qno=? AND qid=?";
             pstmt = conn.prepareStatement(delsql);
             pstmt.setInt(1, Integer.parseInt(qno));
             pstmt.setString(2, id);
